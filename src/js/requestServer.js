@@ -50,8 +50,6 @@ export class RequestServer {
     );
   }
   movieImage(backdropPath) {
-    return axios.get(`https://image.tmdb.org/t/p/original/${backdropPath}`, {
-      responseType: 'blob',
-    });
+    return axios.get(`https://image.tmdb.org/t/p/original${backdropPath}`);
   }
 }

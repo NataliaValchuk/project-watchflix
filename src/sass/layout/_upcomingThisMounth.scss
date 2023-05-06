@@ -1,0 +1,30 @@
+img {
+  display: block;
+
+  @media screen and (min-width: 480px) {
+    width: 480px;
+  }
+
+  @media screen and (min-width: 768px) {
+    width: 768px;
+  }
+
+  @media screen and (min-width: 1200px) {
+    width: 1200px;
+  }
+}
+
+.upcoming__movie-backdrop {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.upcoming__movie-info {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.upcoming__movie-about {
+  max-height: 160px;
+  overflow-y: auto;
+}
