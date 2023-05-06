@@ -4,8 +4,8 @@
   padding-right: 20px;
   width: 100%;
 
-  @media screen and (min-width: 480px) {
-    width: 480px;
+  @media screen and (min-width: 320px) {
+    width: 100%;
   }
 
   @media screen and (min-width: 768px) {
@@ -14,7 +14,7 @@
     padding-right: 32px;
   }
 
-  @media screen and (min-width: 1200px) {
-    width: 1200px;
+  @media screen and (min-width: 1280px) {
+    width: 1280px;
   }
 }
