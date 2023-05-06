@@ -1,30 +1,89 @@
-img {
-  display: block;
-
-  @media screen and (min-width: 480px) {
-    width: 480px;
+.upcoming {
+  &__title {
+    text-transform: uppercase;
   }
 
-  @media screen and (min-width: 768px) {
-    width: 768px;
+  &__body {
+    padding: 20px 0;
   }
 
-  @media screen and (min-width: 1200px) {
-    width: 1200px;
+  &__status-message {
+    &--hidden {
+      display: none;
+    }
   }
-}
 
-.upcoming__movie-backdrop {
-  display: inline-block;
-  vertical-align: top;
-}
+  &__movie {
+    display: flex;
+    align-items: flex-start;
 
-.upcoming__movie-info {
-  display: inline-block;
-  vertical-align: top;
-}
+    &-backdrop {
+      display: block;
+      width: 50%;
+      margin-right: 40px;
+      object-fit: contain;
+    }
 
-.upcoming__movie-about {
-  max-height: 160px;
-  overflow-y: auto;
+    &-info {
+      display: inline-block;
+      vertical-align: top;
+    }
+
+    &-title {
+      text-transform: uppercase;
+    }
+
+    &-stats {
+      display: grid;
+      grid-template-columns: 1fr;
+      row-gap: 10px;
+      max-width: 400px;
+      margin: 20px 0;
+    }
+
+    &-stats-item {
+      display: flex;
+      justify-content: flex-start;
+    }
+
+    &-stats-label {
+      flex: 1;
+      margin-right: 30px;
+    }
+
+    &-stats-value {
+      flex: 1;
+
+      &--vote {
+        display: flex;
+      }
+    }
+
+    &-vote {
+      min-width: 30px;
+      padding: 1px 4px;
+      color: #000;
+      background-color: #fff;
+      border-radius: 5px;
+      text-align: center;
+    }
+
+    &-vote-divider {
+      display: inline-block;
+      margin: 0 8px;
+    }
+
+    &-about-title {
+      margin-bottom: 20px;
+    }
+
+    &-about-text {
+      max-height: 160px;
+      overflow-y: auto;
+    }
+
+    &--hidden {
+      display: none;
+    }
+  }
 }

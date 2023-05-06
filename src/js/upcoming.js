@@ -1,24 +1,40 @@
 import { RequestServer } from './requestServer';
 
+const loadingMessageEl = document.querySelector('#upcoming-loading-message');
+const noDataMessageEl = document.querySelector('#upcoming-no-data-message');
+const errorMessageEl = document.querySelector('#upcoming-error-message');
+const movieEl = document.querySelector('#upcoming-movie');
+
 const requestServer = new RequestServer();
 
 const fetchUpcoming = async () => {
   try {
     const response = await requestServer.newFilms();
 
-    fillData(response);
+    await fillData(response);
+
+    hideLoadingMessage();
+    showMovie();
   } catch (error) {
     console.error(error);
+
+    hideLoadingMessage();
+    showErrorMessage();
   }
 };
 
-const fetchMovieImage = async path => await requestServer.movieImage(path);
-
 const fillData = async response => {
   const movies = response.data.results;
-  const movie = movies[Math.round(Math.random() * movies.length)];
+  const moviesLength = movies.length;
 
-  if (!movie) return;
+  if (!moviesLength) {
+    hideLoadingMessage();
+    showNoDataMessage();
+
+    return;
+  }
+
+  const movie = movies[Math.round(Math.random() * (moviesLength - 1))];
 
   fillTitle(movie.original_title);
   fillBackdrop(movie.backdrop_path);
@@ -26,53 +42,76 @@ const fillData = async response => {
   fillVote(movie.vote_average, movie.vote_count);
   fillPopularity(movie.popularity);
 
-  const genresResponse = await requestServer.movieGenre();
-  const genres = movie.genre_ids.map(id =>
-    genresResponse.data.genres.find(genre => genre.id === id)
-  );
+  await fillGenre(movie);
 
-  fillGenre(genres);
   fillAbout(movie.overview);
 };
 
-const fillReleaseDate = value => {
-  const releaseDate = document.querySelector('.release-date-js');
+const hideLoadingMessage = () =>
+  loadingMessageEl.classList.add('upcoming__status-message--hidden');
 
-  releaseDate.innerText = `Release Date ${value}`;
+const showNoDataMessage = () =>
+  noDataMessageEl.classList.remove('upcoming__status-message--hidden');
+
+const showErrorMessage = () =>
+  errorMessageEl.classList.remove('upcoming__status-message--hidden');
+
+const showMovie = () => {
+  movieEl.classList.remove('upcoming__movie--hidden');
+};
+
+const fillReleaseDate = value => {
+  const releaseDate = document.querySelector('#upcoming-movie-release-date');
+  const originalDate = new Date(value);
+  const formattedDate = originalDate.toLocaleDateString().replace(/\//g, '.');
+
+  releaseDate.innerText = formattedDate;
 };
 
 const fillVote = (voteAverage, voteCount) => {
-  const vote = document.querySelector('.vote-js');
+  const voteAverageEl = document.querySelector('#upcoming-vote-average');
+  const voteCountEl = document.querySelector('#upcoming-vote-count');
 
-  vote.innerText = `Vote / Votes ${voteAverage}/${voteCount}`;
+  voteAverageEl.innerText = voteAverage;
+  voteCountEl.innerText = voteCount;
 };
 
 const fillPopularity = value => {
-  const popularity = document.querySelector('.popularity-js');
+  const popularity = document.querySelector('#upcoming-movie-popularity');
 
-  popularity.innerText = `Popularity ${value}`;
+  popularity.innerText = value.toFixed(1);
 };
 
-const fillGenre = genres => {
-  const genre = document.querySelector('.genre-js');
+const fillGenre = async movie => {
+  const genreEl = document.querySelector('#upcoming-movie-genre');
 
-  genre.innerText = `Genre ${genres.map(genre => genre.name).join(', ')}`;
+  const genres = await requestServer.movieGenre();
+
+  const currentMovieGenres = genres
+    ? movie.genre_ids.map(id =>
+        genres.data.genres.find(genre => genre.id === id)
+      )
+    : [];
+
+  const genresString = currentMovieGenres.map(genre => genre.name).join(', ');
+
+  genreEl.innerText = genresString || '-';
 };
 
 const fillAbout = value => {
-  const about = document.querySelector('.about-js');
+  const about = document.querySelector('#upcoming-movie-about');
 
-  about.innerText = `About ${value}`;
+  about.innerText = value;
 };
 
 const fillTitle = value => {
-  const title = document.querySelector('.upcoming-movie-title-js');
+  const title = document.querySelector('#upcoming-movie-title');
 
   title.innerText = value;
 };
 
 const fillBackdrop = async backdropPath => {
-  const img = document.querySelector('.upcoming-movie-backdrop-js');
+  const img = document.querySelector('#upcoming-movie-backdrop');
 
   img.src = `https://image.tmdb.org/t/p/original${backdropPath}`;
 };
